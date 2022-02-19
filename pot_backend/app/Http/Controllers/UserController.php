@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
-use App\Services\TokenManager;
+use App\Services\Token\Token;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function __construct(
-        private TokenManager $tokenManager,
+        private Token $tokenManager,
         private ?Authenticatable $currentUser
     ){}
 

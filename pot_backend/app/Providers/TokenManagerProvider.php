@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Controllers\UserController;
-use App\Services\TokenManager;
+use App\Services\Token\TokenManager;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,9 +26,9 @@ class TokenManagerProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(UserController::class, static fn() => new UserController(
-            $this->app->make(TokenManager::class),
-            $this->app->make(Authenticatable::class)
+        $this->app->bind(UserController::class, static fn($app) => new UserController(
+            $app->make(TokenManager::class),
+            $app->make(Authenticatable::class)
         ));
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Token;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class TokenManager 
+class TokenManager implements Token
 {
     public function checkToken(string $password, User $user): bool
     {
