@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
             $table->unsignedBigInteger('fertilizer_id');
             $table->foreign('fertilizer_id')->references('id')->on('fertilizers')->onDelete('cascade');
-            $table->interger('period');
+            $table->integer('period');
             $table->float('amount');
             $table->timestamps();
         });

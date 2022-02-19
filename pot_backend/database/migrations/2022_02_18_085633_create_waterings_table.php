@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('flower_id');
             $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
             $table->integer('period');
-            $table->timestamps('last_watering_date');
+            $table->dateTime('last_watering_date');
             $table->boolean('is_active');
             $table->timestamps();
         });
