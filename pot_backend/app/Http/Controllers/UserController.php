@@ -49,15 +49,16 @@ class UserController extends Controller
                 'status' => 'success',
                 'message' => 'User created successfully',
             ];
+            
+            return response()->json($result, 201);
         } 
-        else {
-            $result = [
-                'status' => 'error',
-                'message' => 'User not created',
-            ];
-        }
+        
+        $result = [
+            'status' => 'error',
+            'message' => 'User not created',
+        ];
 
-        return response()->json($result, 201);
+        return response()->json($result, 500);
     }
 
     public function logout()
