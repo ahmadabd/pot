@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('user_flowers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor('users')->constrained()->onDelete('cascade');
-            $table->foreignIdFor('flowers')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('flower_id');
+            $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
             $table->unsignedSmallInteger('role');
             $table->timestamps();
         });

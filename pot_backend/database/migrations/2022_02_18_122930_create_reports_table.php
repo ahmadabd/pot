@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor('flowers')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('flower_id');
+            $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
             $table->float('height');
             $table->float('temperature')->default(0);
             $table->float('humidity')->default(0);

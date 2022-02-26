@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('waterings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor('flowers')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('flower_id');
+            $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
             $table->integer('period');
             $table->dateTime('last_watering_date');
             $table->boolean('is_active');
