@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('waterings', function (Blueprint $table) {
+        Schema::create('user_flowers', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor('users')->constrained()->onDelete('cascade');
             $table->foreignIdFor('flowers')->constrained()->onDelete('cascade');
-            $table->integer('period');
-            $table->dateTime('last_watering_date');
-            $table->boolean('is_active');
+            $table->unsignedSmallInteger('role');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('waterings');
+        Schema::dropIfExists('user_flowers');
     }
 };

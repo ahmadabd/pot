@@ -15,10 +15,8 @@ return new class extends Migration
     {
         Schema::create('flower_fertilizers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('flower_id');
-            $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
-            $table->unsignedBigInteger('fertilizer_id');
-            $table->foreign('fertilizer_id')->references('id')->on('fertilizers')->onDelete('cascade');
+            $table->foreignIdFor('flowers')->constrained()->onDelete('cascade');
+            $table->foreignIdFor('fertilizers')->constrained()->onDelete('cascade');
             $table->integer('period');
             $table->float('amount');
             $table->timestamps();
