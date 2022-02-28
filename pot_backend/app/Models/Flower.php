@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Flower extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+    ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

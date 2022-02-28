@@ -2,12 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\FlowerRequest;
+use App\Models\Flower;
 
 class FlowerController extends Controller
 {
-    public function create()
+    public function create(FlowerRequest $request)
     {
-        # code...
+        $flower = Flower::create([
+            'name' => $request->validated()['name'],
+            'description' => $request->validated()['description'],
+            'user_id' => $request->user->id,
+        ]);
+
+        if ($flower) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Flower created successfully',
+            ], 201);
+        }
     }
 }
