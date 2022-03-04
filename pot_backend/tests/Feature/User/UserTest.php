@@ -30,6 +30,28 @@ class UserTest extends TestCase
 
 
     /** @test */
+    public function check_user_registeration_when_user_exists()
+    {
+        $input = [
+            'name' => 'John Doe',
+            'email' => 'test@gmail.com',
+            'password' => 'secret',
+        ];
+
+        User::factory()->create([
+            'email' => $input['email'],
+        ]);
+
+        $response = $this->post(route('register'), $input)
+            ->assertStatus(401);
+
+        $response->assertExactJson([
+            "status" => "error",
+            "message" => "UnAuthorized: User already exists"
+        ]);
+    }
+
+    /** @test */
     public function check_user_login() 
     {
         $input = [
@@ -71,7 +93,7 @@ class UserTest extends TestCase
 
         $response->assertExactJson([
             "status" => "error",
-            "message" => "Invalid credentials"
+            "message" => "UnAuthorized: Username or Password is incorrect"
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\Token\Token;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class UserController extends Controller
@@ -19,12 +20,7 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (empty($user) || !$this->tokenManager->checkToken($request->password, $user)) {
-            $result = [
-                'status' => 'error',
-                'message' => 'Invalid credentials',
-            ];
-
-            return response()->json($result, 401);
+            throw new AuthorizationException('Username or Password is incorrect', 401);
         } 
 
         $result = [
@@ -38,7 +34,11 @@ class UserController extends Controller
 
     public function register(UserRequest $request)
     {
-        $user = User::firstOrCreate([
+        if (User::where('email', $request->email)->exists()) {
+            throw new AuthorizationException('User already exists', 401);
+        }
+
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $this->tokenManager->createToken($request->password),
@@ -52,13 +52,6 @@ class UserController extends Controller
             
             return response()->json($result, 201);
         } 
-        
-        $result = [
-            'status' => 'error',
-            'message' => 'User not created',
-        ];
-
-        return response()->json($result, 500);
     }
 
     public function logout()

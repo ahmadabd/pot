@@ -4,8 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 
-class checkException
+class checkExceptionApi
 {
     /**
      * Handle an incoming request.
@@ -16,6 +17,14 @@ class checkException
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        $response = $next($request);
+    
+        $response = app(Pipeline::class)->send($response)->through([
+            \App\ExceptionFilter\UnAuthorized::class,
+            \App\ExceptionFilter\ModelNotFound::class,
+            \App\ExceptionFilter\InternalError::class,
+        ])->thenReturn();
+
+        return $response;
     }
 }
