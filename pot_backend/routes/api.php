@@ -15,4 +15,5 @@ Route::prefix('v1')->
     middleware(['auth:sanctum', 'getUser'])->
     group(static function() {
         Route::post('/flower', [FlowerController::class, 'create'])->name('flowers.create');
+        Route::put('/flower/{flower}', [FlowerController::class, 'update'])->name('flowers.update');
 });

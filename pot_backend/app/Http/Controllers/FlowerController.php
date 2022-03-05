@@ -22,4 +22,19 @@ class FlowerController extends Controller
             ], 201);
         }
     }
+
+    public function update(FlowerRequest $request, Flower $flower)
+    {
+        $this->authorize('access', $flower);
+
+        $flower = $flower->updateOrFail([
+            'name' => $request->validated()['name'],
+            'description' => $request->validated()['description']
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Flower updated successfully'
+        ], 201);
+    }
 }

@@ -9,7 +9,7 @@ class InternalError {
 
     public function handle($response, Closure $next)
     {
-        if (!empty($response->exception) && $response->exception instanceof \Exception) {
+        if ($response->exception instanceof \Exception) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'InternalError: ' . $response->exception->getMessage(),

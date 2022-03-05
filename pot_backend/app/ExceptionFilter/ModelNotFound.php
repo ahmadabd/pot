@@ -11,7 +11,7 @@ class ModelNotFound
 
     public function handle($response, Closure $next)
     {
-        if (!empty($response->exception) && $response->exception instanceof ModelNotFoundException) {
+        if ($response->exception instanceof ModelNotFoundException) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'ModelNotFound: ' . $response->exception->getMessage(),

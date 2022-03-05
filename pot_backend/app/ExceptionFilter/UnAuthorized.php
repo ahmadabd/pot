@@ -11,7 +11,7 @@ class UnAuthorized
 
     public function handle($response, Closure $next)
     {
-        if (!empty($response->exception) && $response->exception instanceof AuthorizationException) {
+        if ($response->exception instanceof AuthorizationException) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'UnAuthorized: ' . $response->exception->getMessage(),

@@ -19,12 +19,17 @@ class checkExceptionApi
     {
         $response = $next($request);
     
-        $response = app(Pipeline::class)->send($response)->through([
-            \App\ExceptionFilter\UnAuthorized::class,
-            \App\ExceptionFilter\ModelNotFound::class,
-            \App\ExceptionFilter\InternalError::class,
-        ])->thenReturn();
-
+        if (!empty($response->exception)) {
+            $response = app(Pipeline::class)->send($response)->through([
+                \App\ExceptionFilter\UnAuthorized::class,
+                \App\ExceptionFilter\ModelNotFound::class,
+                \App\ExceptionFilter\Validation::class,
+                \App\ExceptionFilter\InternalError::class,
+            ])->thenReturn();
+    
+            return $response;
+        }
+        
         return $response;
     }
 }
