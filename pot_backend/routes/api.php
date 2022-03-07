@@ -14,6 +14,9 @@ Route::controller(UserController::class)->group(static function() {
 Route::prefix('v1')->
     middleware(['auth:sanctum', 'getUser'])->
     group(static function() {
+        Route::get('/flower/{id}', [FlowerController::class, 'getFlower'])->name('flowers.get');
+        Route::get('/flower', [FlowerController::class, 'getFlowers'])->name('flowers.getAll');
         Route::post('/flower', [FlowerController::class, 'create'])->name('flowers.create');
         Route::put('/flower/{flower}', [FlowerController::class, 'update'])->name('flowers.update');
+        Route::delete('/flower/{flower}', [FlowerController::class, 'delete'])->name('flowers.delete');
 });
