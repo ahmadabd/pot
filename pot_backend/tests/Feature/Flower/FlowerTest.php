@@ -23,7 +23,7 @@ class FlowerTest extends TestCase
             'description' => 'A beautiful rose',
         ];
 
-        $response = $this->post(route('flowers.create'), $input)
+        $response = $this->postJson(route('flowers.create'), $input)
             ->assertStatus(400);
 
         $response->assertExactJson([
@@ -43,7 +43,7 @@ class FlowerTest extends TestCase
             'description' => 'A beautiful rose',
         ];
 
-        $response = $this->post(route('flowers.create'), $input)
+        $response = $this->postJson(route('flowers.create'), $input)
             ->assertStatus(201);
 
         $response->assertExactJson([
@@ -65,7 +65,7 @@ class FlowerTest extends TestCase
             "description" => "Rose is beautiful"
         ];
 
-        $response = $this->put(route('flowers.update', [$flower]), $input)
+        $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
             ->assertStatus(401);
 
         $response->assertExactJson([
@@ -87,7 +87,7 @@ class FlowerTest extends TestCase
             "description" => "Rose is beautiful"
         ];
 
-        $response = $this->put(route('flowers.update', [$flower]), $input)
+        $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
             ->assertStatus(201);
         
         $this->assertSame($input["name"], Flower::find($flower->id)->name);
@@ -106,7 +106,7 @@ class FlowerTest extends TestCase
 
         $flower = Flower::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->delete(route('flowers.delete', [$flower]))
+        $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
             ->assertStatus(201);
 
         $this->assertSame(0, $user->flowers()->count());
@@ -126,7 +126,7 @@ class FlowerTest extends TestCase
 
         $flower = Flower::factory()->create();
 
-        $response = $this->deleteJson(route('flowers.delete', [$flower]))
+        $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
             ->assertStatus(401);
 
         $response->assertExactJson([
