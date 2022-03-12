@@ -150,24 +150,40 @@ class FlowerTest extends TestCase
         ]);
     }
 
-    // /** @test */
-    // public function check_get_flower()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+    /** @test */
+    public function check_get_flower()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $flower = Flower::factory()->create(['user_id' => $user->id]);
+        $flower = $this->createFlowerUser($user);
 
-    //     $response = $this->getJson(route('flowers.get', [$flower->id]));
+        $watering = $this->createWatering($flower->id, 4);
+        $fertilizer = $this->createFertilizer($flower->id, 30);
 
-    //     $response->assertJson([
-    //         'status' => 'success',
-    //         'message' => 'Flower get successfully',
-    //         'data' => [
-    //             'id' => $flower->id
-    //         ]
-    //     ]);
-    // }
+        $response = $this->getJson(route('flowers.get', [$flower->id]));
+
+        $response->assertJson([
+            'status' => 'success',
+            'message' => 'Flower get successfully',
+            'data' => [
+                'id' => $flower->id,
+                'watering' => [
+                    'id' => $watering->id,
+                ],
+                'flower_fertilizers' => [
+                    [
+                        'id' => $fertilizer->id,
+                        'flower_id' => $flower->id,
+                        'fertilizers' => [
+                            'id' => $fertilizer->fertilizers()->first()->id,
+                            'name' => $fertilizer->fertilizers()->first()->name,
+                        ]
+                    ],
+                ]
+            ]
+        ]);
+    }
 
 
     // /** @test */

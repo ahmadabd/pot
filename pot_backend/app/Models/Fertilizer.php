@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Fertilizer extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
+
+    public function flowerFertilizers()
+    {
+        return $this->hasMany(FlowerFertilizer::class);
+    }
 }

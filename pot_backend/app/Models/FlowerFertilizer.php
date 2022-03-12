@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class FlowerFertilizer extends Model
 {
     use HasFactory;
+
+    public function fertilizers()
+    {
+        return $this->belongsTo(Fertilizer::class, 'fertilizer_id');
+    }
 }

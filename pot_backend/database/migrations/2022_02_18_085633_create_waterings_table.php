@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
             $table->integer('period');
             $table->dateTime('last_watering_date');
-            $table->boolean('is_active');
+            $table->dateTime('next_watering_date');
             $table->timestamps();
         });
     }

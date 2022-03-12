@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FlowerRequest;
 use App\Models\Flower;
-use App\Models\FlowerUser;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +18,8 @@ class FlowerController extends Controller
         ];
 
         $user = $request->user;
-        $flower = $user->flowers()->where('id', $id)->firstOrFail();
+        $flower = $user->flowers()->where('flower_id', $id)
+            ->with(['watering', 'flowerFertilizers.fertilizers'])->firstOrFail();
 
         $result["data"] = $flower;
 
@@ -28,6 +28,8 @@ class FlowerController extends Controller
 
     public function getFlowers(Request $request)
     {
+        // Should return watering and fertazile date too
+        
         $result = [
             'status' => 'success',
             'message' => 'Flower get successfully',
@@ -88,7 +90,6 @@ class FlowerController extends Controller
         $this->authorize('change', $flower);
         
         $flower->deleteOrFail();
-        // $flower->users()->deatach()
 
         return response()->json([
             'status' => 'success',

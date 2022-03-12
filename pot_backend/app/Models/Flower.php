@@ -24,4 +24,14 @@ class Flower extends Model
     {
         return $this->users()->wherePivot('role_id', Role::owner()->first()->id);
     }
+
+    public function watering()
+    {
+        return $this->hasOne(Watering::class);
+    }
+
+    public function flowerFertilizers()
+    {
+        return $this->hasMany(FlowerFertilizer::class);
+    }
 }
