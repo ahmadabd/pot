@@ -70,7 +70,7 @@ class FlowerController extends Controller
 
     public function update(FlowerRequest $request, Flower $flower)
     {
-        $this->authorize('access', $flower);
+        $this->authorize('change', $flower);
 
         $flower->updateOrFail([
             'name' => $request->validated()['name'],
@@ -85,9 +85,10 @@ class FlowerController extends Controller
 
     public function delete(Request $request, Flower $flower)
     {
-        $this->authorize('access', $flower);
+        $this->authorize('change', $flower);
         
         $flower->deleteOrFail();
+        // $flower->users()->deatach()
 
         return response()->json([
             'status' => 'success',

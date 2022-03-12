@@ -89,65 +89,66 @@ class FlowerTest extends TestCase
     }
 
 
-    // /** @test */
-    // public function check_flower_update()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
-    //     $flower = Flower::factory()->create(['user_id' => $user->id]);
-
-    //     $input = [
-    //         "name" => "Rose",
-    //         "description" => "Rose is beautiful"
-    //     ];
-
-    //     $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
-    //         ->assertStatus(201);
+    /** @test */
+    public function check_flower_update()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
         
-    //     $this->assertSame($input["name"], Flower::find($flower->id)->name);
+        $flower = $this->createFlowerUser($user);
 
-    //     $response->assertExactJson([
-    //         "status" => "success",
-    //         "message" => "Flower updated successfully"
-    //     ]);
-    // }
+        $input = [
+            "name" => "Rose",
+            "description" => "Rose is beautiful"
+        ];
 
-    // /** @test */
-    // public function check_flower_delete()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+        $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
+            ->assertStatus(201);
 
-    //     $flower = Flower::factory()->create(['user_id' => $user->id]);
+        $this->assertSame($input["name"], Flower::find($flower->id)->name);
 
-    //     $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
-    //         ->assertStatus(201);
+        $response->assertExactJson([
+            "status" => "success",
+            "message" => "Flower updated successfully"
+        ]);
+    }
 
-    //     $this->assertSame(0, $user->flowers()->count());
+    /** @test */
+    public function check_flower_delete()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $response->assertExactJson([
-    //         "status" => "success",
-    //         "message" => "Flower deleted successfully"
-    //     ]);
-    // }
+        $flower = $this->createFlowerUser($user);
+
+        $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
+            ->assertStatus(201);
+
+        $this->assertSame(0, FlowerUser::where('flower_id', $flower->id)->count());
+
+        $response->assertExactJson([
+            "status" => "success",
+            "message" => "Flower deleted successfully"
+        ]);
+    }
 
 
-    // /** @test */
-    // public function check_flower_delete_unauthorized()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+    /** @test */
+    public function check_flower_delete_unauthorized()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $flower = Flower::factory()->create();
+        $flower = $this->createFlowerUser(User::factory()->create());
 
-    //     $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
-    //         ->assertStatus(401);
+        $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
+            ->assertStatus(401);
 
-    //     $response->assertExactJson([
-    //         "status" => "error",
-    //         "message" => "UnAuthorized: This action is unauthorized."
-    //     ]);
-    // }
+        $response->assertExactJson([
+            "status" => "error",
+            "message" => "UnAuthorized: This action is unauthorized."
+        ]);
+    }
 
     // /** @test */
     // public function check_get_flower()
