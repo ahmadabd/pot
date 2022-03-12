@@ -22,6 +22,6 @@ class FlowerPolicy
 
     public function access(User $user, Flower $flower)
     {
-        return $user->id == $flower->user_id;
+        return $user->id == $flower->owner()->first()->user_id;
     }
 }

@@ -18,7 +18,6 @@ class FlowerFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory()->create()->id,
             'name' => $this->faker->name(),
             'description' => $this->faker->text()
         ];

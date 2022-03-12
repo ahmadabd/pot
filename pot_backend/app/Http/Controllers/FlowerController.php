@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FlowerRequest;
 use App\Models\Flower;
+use App\Models\FlowerUser;
 use App\Models\Role;
-use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -58,12 +58,8 @@ class FlowerController extends Controller
                 'name' => $request->validated()['name'],
                 'description' => $request->validated()['description'],
             ]);
-    
-            UserRole::create([
-                'user_id' => $request->user()->id,
-                'flower_id' => $flower->id,
-                'role_id' => Role::owner()->first()->id,
-            ]);
+
+            $flower->users()->attach($request->user, ['role_id' => Role::owner()->first()->id]);
         });
 
         return response()->json([

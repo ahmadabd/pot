@@ -15,8 +15,13 @@ class Flower extends Model
         'description',
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'flower_users')->withPivot('role_id');
+    }
+
+    public function owner()
+    {
+        return $this->users()->wherePivot('role_id', Role::owner()->first()->id);
     }
 }

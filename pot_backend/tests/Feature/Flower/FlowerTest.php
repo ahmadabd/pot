@@ -3,9 +3,10 @@
 namespace Tests\Feature\Flower;
 
 use App\Models\Flower;
+use App\Models\FlowerUser;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\UserRole;
+use App\Models\UserFlower;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -56,7 +57,7 @@ class FlowerTest extends TestCase
             ->assertStatus(201);
 
         $this->assertSame(1, Flower::count());
-        $this->assertEquals(Role::owner()->first()->id, UserRole::where('user_id', $user->id)->first()->role_id);
+        $this->assertEquals(Role::owner()->first()->id, FlowerUser::where('user_id', $user->id)->first()->role_id);
 
         $response->assertExactJson([
             "status" => "success",
@@ -65,26 +66,27 @@ class FlowerTest extends TestCase
     }
 
 
-    // /** @test */
-    // public function check_flower_update_when_user_is_unauthorized()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
-    //     $flower = Flower::factory()->create();
+    /** @test */
+    public function check_flower_update_when_user_is_unauthorized()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        
+        $flower = $this->createFlowerUser(User::factory()->create());
 
-    //     $input = [
-    //         "name" => "Rose",
-    //         "description" => "Rose is beautiful"
-    //     ];
+        $input = [
+            "name" => "Rose",
+            "description" => "Rose is beautiful"
+        ];
 
-    //     $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
-    //         ->assertStatus(401);
+        $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
+            ->assertStatus(401);
 
-    //     $response->assertExactJson([
-    //         "status" => "error",
-    //         "message" => "UnAuthorized: This action is unauthorized."
-    //     ]);
-    // }
+        $response->assertExactJson([
+            "status" => "error",
+            "message" => "UnAuthorized: This action is unauthorized."
+        ]);
+    }
 
 
     // /** @test */
