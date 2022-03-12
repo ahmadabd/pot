@@ -3,14 +3,21 @@
 namespace Tests\Feature\Flower;
 
 use App\Models\Flower;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class FlowerTest extends TestCase
 {
     use RefreshDatabase;
+    use FlowerFactories;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
 
     /** @test */
     public function check_flower_create_validation_error()
@@ -35,6 +42,8 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_flower_create()
     {
+        $role = $this->createRole('owner');
+
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -46,6 +55,9 @@ class FlowerTest extends TestCase
         $response = $this->postJson(route('flowers.create'), $input)
             ->assertStatus(201);
 
+        $this->assertSame(1, Flower::count());
+        $this->assertEquals(Role::owner()->first()->id, UserRole::where('user_id', $user->id)->first()->role_id);
+
         $response->assertExactJson([
             "status" => "success",
             "message" => "Flower created successfully"
@@ -53,172 +65,172 @@ class FlowerTest extends TestCase
     }
 
 
-    /** @test */
-    public function check_flower_update_when_user_is_unauthorized()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $flower = Flower::factory()->create();
+    // /** @test */
+    // public function check_flower_update_when_user_is_unauthorized()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
+    //     $flower = Flower::factory()->create();
 
-        $input = [
-            "name" => "Rose",
-            "description" => "Rose is beautiful"
-        ];
+    //     $input = [
+    //         "name" => "Rose",
+    //         "description" => "Rose is beautiful"
+    //     ];
 
-        $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
-            ->assertStatus(401);
+    //     $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
+    //         ->assertStatus(401);
 
-        $response->assertExactJson([
-            "status" => "error",
-            "message" => "UnAuthorized: This action is unauthorized."
-        ]);
-    }
+    //     $response->assertExactJson([
+    //         "status" => "error",
+    //         "message" => "UnAuthorized: This action is unauthorized."
+    //     ]);
+    // }
 
 
-    /** @test */
-    public function check_flower_update()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $flower = Flower::factory()->create(['user_id' => $user->id]);
+    // /** @test */
+    // public function check_flower_update()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
+    //     $flower = Flower::factory()->create(['user_id' => $user->id]);
 
-        $input = [
-            "name" => "Rose",
-            "description" => "Rose is beautiful"
-        ];
+    //     $input = [
+    //         "name" => "Rose",
+    //         "description" => "Rose is beautiful"
+    //     ];
 
-        $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
-            ->assertStatus(201);
+    //     $response = $this->putJson(route('flowers.update', [$flower->id]), $input)
+    //         ->assertStatus(201);
         
-        $this->assertSame($input["name"], Flower::find($flower->id)->name);
+    //     $this->assertSame($input["name"], Flower::find($flower->id)->name);
 
-        $response->assertExactJson([
-            "status" => "success",
-            "message" => "Flower updated successfully"
-        ]);
-    }
+    //     $response->assertExactJson([
+    //         "status" => "success",
+    //         "message" => "Flower updated successfully"
+    //     ]);
+    // }
 
-    /** @test */
-    public function check_flower_delete()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+    // /** @test */
+    // public function check_flower_delete()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
 
-        $flower = Flower::factory()->create(['user_id' => $user->id]);
+    //     $flower = Flower::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
-            ->assertStatus(201);
+    //     $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
+    //         ->assertStatus(201);
 
-        $this->assertSame(0, $user->flowers()->count());
+    //     $this->assertSame(0, $user->flowers()->count());
 
-        $response->assertExactJson([
-            "status" => "success",
-            "message" => "Flower deleted successfully"
-        ]);
-    }
-
-
-    /** @test */
-    public function check_flower_delete_unauthorized()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $flower = Flower::factory()->create();
-
-        $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
-            ->assertStatus(401);
-
-        $response->assertExactJson([
-            "status" => "error",
-            "message" => "UnAuthorized: This action is unauthorized."
-        ]);
-    }
-
-    /** @test */
-    public function check_get_flower()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $flower = Flower::factory()->create(['user_id' => $user->id]);
-
-        $response = $this->getJson(route('flowers.get', [$flower->id]));
-
-        $response->assertJson([
-            'status' => 'success',
-            'message' => 'Flower get successfully',
-            'data' => [
-                'id' => $flower->id
-            ]
-        ]);
-    }
+    //     $response->assertExactJson([
+    //         "status" => "success",
+    //         "message" => "Flower deleted successfully"
+    //     ]);
+    // }
 
 
-    /** @test */
-    public function check_get_flower_that_is_now_users_flower()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+    // /** @test */
+    // public function check_flower_delete_unauthorized()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
 
-        $flower = Flower::factory()->create();
+    //     $flower = Flower::factory()->create();
 
-        $response = $this->getJson(route('flowers.get', [$flower->id]))
-            ->assertStatus(404);
+    //     $response = $this->deleteJson(route('flowers.delete', [$flower->id]))
+    //         ->assertStatus(401);
 
-        $response->assertExactJson([
-            "status" => "error",
-            "message" => "ModelNotFound: No query results for model [App\\Models\\Flower]."
-        ]);
-    }
+    //     $response->assertExactJson([
+    //         "status" => "error",
+    //         "message" => "UnAuthorized: This action is unauthorized."
+    //     ]);
+    // }
 
-    /** @test */
-    public function check_get_flowers_when_list_is_empty()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+    // /** @test */
+    // public function check_get_flower()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
 
-        $response = $this->getJson(route('flowers.getAll'));
+    //     $flower = Flower::factory()->create(['user_id' => $user->id]);
 
-        $response->assertJson([
-            'status' => 'success',
-            'message' => 'Flower get successfully',
-            'data' => [
-                "total" => 0,
-                "lastPage" => 1,
-                "perPage" => "5",
-                "currentPage" => 1,
-                "items" => []
-            ]
-        ]);
-    }
+    //     $response = $this->getJson(route('flowers.get', [$flower->id]));
 
-    /** @test */
-    public function check_get_flowers()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+    //     $response->assertJson([
+    //         'status' => 'success',
+    //         'message' => 'Flower get successfully',
+    //         'data' => [
+    //             'id' => $flower->id
+    //         ]
+    //     ]);
+    // }
 
-        $flowers = Flower::factory(10)->create(['user_id' => $user->id]);
 
-        $input = [
-            'paginationLimit' => 5
-        ];
+    // /** @test */
+    // public function check_get_flower_that_is_now_users_flower()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
 
-        $response = $this->getJson(route('flowers.getAll', $input));
+    //     $flower = Flower::factory()->create();
 
-        $response->assertJson([
-            'status' => 'success',
-            'message' => 'Flower get successfully',
-            'data' => [
-                "total" => 10,
-                "lastPage" => 2,
-                "perPage" => "5",
-                "currentPage" => 1,
-                "items" => [
-                    ['id' => $flowers[0]->id]
-                ]
-            ]
-        ]);
-    }
+    //     $response = $this->getJson(route('flowers.get', [$flower->id]))
+    //         ->assertStatus(404);
+
+    //     $response->assertExactJson([
+    //         "status" => "error",
+    //         "message" => "ModelNotFound: No query results for model [App\\Models\\Flower]."
+    //     ]);
+    // }
+
+    // /** @test */
+    // public function check_get_flowers_when_list_is_empty()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
+
+    //     $response = $this->getJson(route('flowers.getAll'));
+
+    //     $response->assertJson([
+    //         'status' => 'success',
+    //         'message' => 'Flower get successfully',
+    //         'data' => [
+    //             "total" => 0,
+    //             "lastPage" => 1,
+    //             "perPage" => "5",
+    //             "currentPage" => 1,
+    //             "items" => []
+    //         ]
+    //     ]);
+    // }
+
+    // /** @test */
+    // public function check_get_flowers()
+    // {
+    //     $user = User::factory()->create();
+    //     $this->actingAs($user);
+
+    //     $flowers = Flower::factory(10)->create(['user_id' => $user->id]);
+
+    //     $input = [
+    //         'paginationLimit' => 5
+    //     ];
+
+    //     $response = $this->getJson(route('flowers.getAll', $input));
+
+    //     $response->assertJson([
+    //         'status' => 'success',
+    //         'message' => 'Flower get successfully',
+    //         'data' => [
+    //             "total" => 10,
+    //             "lastPage" => 2,
+    //             "perPage" => "5",
+    //             "currentPage" => 1,
+    //             "items" => [
+    //                 ['id' => $flowers[0]->id]
+    //             ]
+    //         ]
+    //     ]);
+    // }
 }

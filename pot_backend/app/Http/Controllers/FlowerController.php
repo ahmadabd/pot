@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FlowerRequest;
 use App\Models\Flower;
+use App\Models\Role;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FlowerController extends Controller
 {
@@ -50,18 +53,23 @@ class FlowerController extends Controller
 
     public function create(FlowerRequest $request)
     {
-        $flower = Flower::create([
-            'name' => $request->validated()['name'],
-            'description' => $request->validated()['description'],
-            'user_id' => $request->user->id,
-        ]);
+        DB::transaction(function() use($request) {
+            $flower = Flower::create([
+                'name' => $request->validated()['name'],
+                'description' => $request->validated()['description'],
+            ]);
+    
+            UserRole::create([
+                'user_id' => $request->user()->id,
+                'flower_id' => $flower->id,
+                'role_id' => Role::owner()->first()->id,
+            ]);
+        });
 
-        if ($flower) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Flower created successfully',
-            ], 201);
-        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Flower created successfully',
+        ], 201);
     }
 
     public function update(FlowerRequest $request, Flower $flower)
