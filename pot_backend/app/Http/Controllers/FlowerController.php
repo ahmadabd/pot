@@ -20,7 +20,7 @@ class FlowerController extends Controller
         $user = $request->user;
         $flower = $user->flowers()
             ->where('flower_id', $id)
-            ->with(['watering', 'flowerFertilizers.fertilizers'])
+            ->getFlower()
             ->firstOrFail();
 
         $result["data"] = $flower;
@@ -28,7 +28,7 @@ class FlowerController extends Controller
         return response()->json($result, 200);
     }
 
-    
+
     public function getFlowers(Request $request)
     {
         $result = [
@@ -40,7 +40,7 @@ class FlowerController extends Controller
 
         $user = $request->user;
         $flowers = $user->flowers()
-            ->with(['watering', 'flowerFertilizers.fertilizers'])
+            ->getFlower()
             ->paginate($paginationLimit);
 
         $data = [

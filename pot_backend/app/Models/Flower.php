@@ -34,4 +34,10 @@ class Flower extends Model
     {
         return $this->hasMany(FlowerFertilizer::class);
     }
+
+    // Scopes
+    public function scopeGetFlower($query)
+    {
+        return $query->with(['watering', 'flowerFertilizers.fertilizers']);
+    }
 }
