@@ -7,6 +7,7 @@ use App\Models\FlowerUser;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserFlower;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -186,70 +187,86 @@ class FlowerTest extends TestCase
     }
 
 
-    // /** @test */
-    // public function check_get_flower_that_is_now_users_flower()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+    /** @test */
+    public function check_get_flower_that_is_now_users_flower()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $flower = Flower::factory()->create();
+        $flower = $this->createFlowerUser(User::factory()->create());
 
-    //     $response = $this->getJson(route('flowers.get', [$flower->id]))
-    //         ->assertStatus(404);
+        $response = $this->getJson(route('flowers.get', [$flower->id]))
+            ->assertStatus(404);
 
-    //     $response->assertExactJson([
-    //         "status" => "error",
-    //         "message" => "ModelNotFound: No query results for model [App\\Models\\Flower]."
-    //     ]);
-    // }
+        $response->assertExactJson([
+            "status" => "error",
+            "message" => "ModelNotFound: No query results for model [App\\Models\\Flower]."
+        ]);
+    }
 
-    // /** @test */
-    // public function check_get_flowers_when_list_is_empty()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+    /** @test */
+    public function check_get_flowers_when_list_is_empty()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $response = $this->getJson(route('flowers.getAll'));
+        $response = $this->getJson(route('flowers.getAll'));
 
-    //     $response->assertJson([
-    //         'status' => 'success',
-    //         'message' => 'Flower get successfully',
-    //         'data' => [
-    //             "total" => 0,
-    //             "lastPage" => 1,
-    //             "perPage" => "5",
-    //             "currentPage" => 1,
-    //             "items" => []
-    //         ]
-    //     ]);
-    // }
+        $response->assertJson([
+            'status' => 'success',
+            'message' => 'Flower get successfully',
+            'data' => [
+                "total" => 0,
+                "lastPage" => 1,
+                "perPage" => "12",
+                "currentPage" => 1,
+                "items" => []
+            ]
+        ]);
+    }
 
-    // /** @test */
-    // public function check_get_flowers()
-    // {
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user);
+    /** @test */
+    public function check_get_flowers()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
-    //     $flowers = Flower::factory(10)->create(['user_id' => $user->id]);
+        $flowers = $this->createFlowerUser($user);
+        $watering = $this->createWatering($flowers->id, 4);
+        $fertilizer = $this->createFertilizer($flowers->id, 30);
 
-    //     $input = [
-    //         'paginationLimit' => 5
-    //     ];
+        $input = [
+            'paginationLimit' => 5
+        ];
 
-    //     $response = $this->getJson(route('flowers.getAll', $input));
+        $response = $this->getJson(route('flowers.getAll', $input));
 
-    //     $response->assertJson([
-    //         'status' => 'success',
-    //         'message' => 'Flower get successfully',
-    //         'data' => [
-    //             "total" => 10,
-    //             "lastPage" => 2,
-    //             "perPage" => "5",
-    //             "currentPage" => 1,
-    //             "items" => [
-    //                 ['id' => $flowers[0]->id]
-    //             ]
-    //         ]
-    //     ]);
-    // }
+        $response->assertJson([
+            'status' => 'success',
+            'message' => 'Flower get successfully',
+            'data' => [
+                "total" => 1,
+                "lastPage" => 1,
+                "perPage" => "5",
+                "currentPage" => 1,
+                "items" => [
+                    [
+                        'id' => $flowers->id,
+                        'watering' => [
+                            'id' => $watering->id,
+                        ],
+                        'flower_fertilizers' => [
+                            [
+                                'id' => $fertilizer->id,
+                                'fertilizers' => [
+                                    'id' => $fertilizer->fertilizers()->first()->id,
+                                    'name' => $fertilizer->fertilizers()->first()->name,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+    }
 }

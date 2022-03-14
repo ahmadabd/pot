@@ -18,27 +18,30 @@ class FlowerController extends Controller
         ];
 
         $user = $request->user;
-        $flower = $user->flowers()->where('flower_id', $id)
-            ->with(['watering', 'flowerFertilizers.fertilizers'])->firstOrFail();
+        $flower = $user->flowers()
+            ->where('flower_id', $id)
+            ->with(['watering', 'flowerFertilizers.fertilizers'])
+            ->firstOrFail();
 
         $result["data"] = $flower;
 
         return response()->json($result, 200);
     }
 
+    
     public function getFlowers(Request $request)
     {
-        // Should return watering and fertazile date too
-        
         $result = [
             'status' => 'success',
             'message' => 'Flower get successfully',
         ];
 
-        $paginationLimit = $request->get('paginationLimit') ?? 5;
+        $paginationLimit = $request->get('paginationLimit') ?? 12;
 
         $user = $request->user;
-        $flowers = $user->flowers()->paginate($paginationLimit);
+        $flowers = $user->flowers()
+            ->with(['watering', 'flowerFertilizers.fertilizers'])
+            ->paginate($paginationLimit);
 
         $data = [
             'total' => $flowers->total(),
@@ -52,6 +55,7 @@ class FlowerController extends Controller
 
         return response()->json($result, 200);
     }
+
 
     public function create(FlowerRequest $request)
     {
@@ -70,6 +74,7 @@ class FlowerController extends Controller
         ], 201);
     }
 
+
     public function update(FlowerRequest $request, Flower $flower)
     {
         $this->authorize('change', $flower);
@@ -84,6 +89,7 @@ class FlowerController extends Controller
             'message' => 'Flower updated successfully'
         ], 201);
     }
+
 
     public function delete(Request $request, Flower $flower)
     {
