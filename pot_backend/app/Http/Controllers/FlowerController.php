@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FlowerRequest;
+use App\Interfaces\FlowerRepositoryInterface;
 use App\Models\Flower;
-use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class FlowerController extends Controller
 {
+    public function __construct(private FlowerRepositoryInterface $flowerRepository){}
+
     public function getFlower(Request $request, int $id)
     {
         $result = [
@@ -17,13 +18,7 @@ class FlowerController extends Controller
             'message' => 'Flower get successfully',
         ];
 
-        $user = $request->user;
-        $flower = $user->flowers()
-            ->where('flower_id', $id)
-            ->getFlower()
-            ->firstOrFail();
-
-        $result["data"] = $flower;
+        $result["data"] = $this->flowerRepository->getFlower($request->user, $id);
 
         return response()->json($result, 200);
     }
@@ -36,22 +31,7 @@ class FlowerController extends Controller
             'message' => 'Flower get successfully',
         ];
 
-        $paginationLimit = $request->get('paginationLimit') ?? 12;
-
-        $user = $request->user;
-        $flowers = $user->flowers()
-            ->getFlower()
-            ->paginate($paginationLimit);
-
-        $data = [
-            'total' => $flowers->total(),
-            'lastPage' => $flowers->lastPage(),
-            'perPage' => $flowers->perPage(),
-            'currentPage' => $flowers->currentPage(),
-            'items' => $flowers->items(),
-        ];
-
-        $result["data"] = $data;
+        $result["data"] = $this->flowerRepository->getFlowers($request->user, $request->get('paginationLimit'));
 
         return response()->json($result, 200);
     }
@@ -59,14 +39,7 @@ class FlowerController extends Controller
 
     public function create(FlowerRequest $request)
     {
-        DB::transaction(function() use($request) {
-            $flower = Flower::create([
-                'name' => $request->validated()['name'],
-                'description' => $request->validated()['description'],
-            ]);
-
-            $flower->users()->attach($request->user, ['role_id' => Role::owner()->first()->id]);
-        });
+        $this->flowerRepository->createFlower($request);
 
         return response()->json([
             'status' => 'success',
@@ -79,10 +52,7 @@ class FlowerController extends Controller
     {
         $this->authorize('change', $flower);
 
-        $flower->updateOrFail([
-            'name' => $request->validated()['name'],
-            'description' => $request->validated()['description']
-        ]);
+        $this->flowerRepository->updateFlower($request, $flower);
 
         return response()->json([
             'status' => 'success',
@@ -95,7 +65,7 @@ class FlowerController extends Controller
     {
         $this->authorize('change', $flower);
         
-        $flower->deleteOrFail();
+        $this->flowerRepository->deleteFlower($flower);
 
         return response()->json([
             'status' => 'success',

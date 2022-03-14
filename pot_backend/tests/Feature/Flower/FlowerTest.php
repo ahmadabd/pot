@@ -57,9 +57,8 @@ class FlowerTest extends TestCase
         $response = $this->postJson(route('flowers.create'), $input)
             ->assertStatus(201);
 
-        $this->assertSame(1, Flower::count());
-        $this->assertEquals(Role::owner()->first()->id, FlowerUser::where('user_id', $user->id)->first()->role_id);
-
+        $this->assertSame(1, $user->flowers()->count());
+       
         $response->assertExactJson([
             "status" => "success",
             "message" => "Flower created successfully"
