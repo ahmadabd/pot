@@ -4,28 +4,21 @@ namespace Tests\Feature\Flower;
 
 use App\Models\Flower;
 use App\Models\FlowerUser;
-use App\Models\Role;
 use App\Models\User;
-use App\Models\UserFlower;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Utilities\UsefullTools;
 
 class FlowerTest extends TestCase
 {
     use RefreshDatabase;
     use FlowerFactories;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
+    use UsefullTools;
 
     /** @test */
     public function check_flower_create_validation_error()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $input = [
             'name' => '',
@@ -46,8 +39,7 @@ class FlowerTest extends TestCase
     {
         $role = $this->createRole('owner');
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $input = [
             'name' => 'Rose',
@@ -69,8 +61,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_flower_update_when_user_is_unauthorized()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
         
         $flower = $this->createFlowerUser(User::factory()->create());
 
@@ -92,8 +83,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_flower_update()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
         
         $flower = $this->createFlowerUser($user);
 
@@ -116,8 +106,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_flower_delete()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $flower = $this->createFlowerUser($user);
 
@@ -136,8 +125,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_flower_delete_unauthorized()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $flower = $this->createFlowerUser(User::factory()->create());
 
@@ -153,8 +141,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_get_flower()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $flower = $this->createFlowerUser($user);
 
@@ -189,8 +176,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_get_flower_that_is_now_users_flower()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $flower = $this->createFlowerUser(User::factory()->create());
 
@@ -206,8 +192,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_get_flowers_when_list_is_empty()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $response = $this->getJson(route('flowers.getAll'));
 
@@ -227,8 +212,7 @@ class FlowerTest extends TestCase
     /** @test */
     public function check_get_flowers()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
 
         $flowers = $this->createFlowerUser($user);
         $watering = $this->createWatering($flowers->id, 4);

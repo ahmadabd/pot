@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FlowerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WateringController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(UserController::class)->group(static function() {
@@ -19,4 +20,6 @@ Route::prefix('v1')->
         Route::post('/flower', [FlowerController::class, 'create'])->name('flowers.create');
         Route::put('/flower/{flower}', [FlowerController::class, 'update'])->name('flowers.update');
         Route::delete('/flower/{flower}', [FlowerController::class, 'delete'])->name('flowers.delete');
+
+        Route::post('watering/{flower}', [WateringController::class, 'addWateringToFlower'])->name('watering.add');
 });
