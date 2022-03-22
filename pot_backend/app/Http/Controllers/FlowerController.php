@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FlowerRequest;
-use App\Interfaces\FlowerRepositoryInterface;
+use App\Repositories\FlowerRepositoryInterface;
 use App\Models\Flower;
 use Illuminate\Http\Request;
 

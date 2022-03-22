@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Interfaces\FlowerRepositoryInterface;
+use App\Repositories\FlowerRepositoryInterface;
 use App\Repositories\FlowerRepository;
 use Illuminate\Support\ServiceProvider;
 

@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\FlowerRepositoryInterface;
 use App\Models\Flower;
 use App\Models\Role;
 use App\Models\User;
