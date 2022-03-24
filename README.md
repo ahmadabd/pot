@@ -1,6 +1,7 @@
 # pot
-Remember watering to flowers
+Remember watering and Fertaziling date for your flowers.
+Its a project for managing your flower watering and fertazile date.
 
-## Taks
-1. upgrade to php 8.1
-2. make enum for role column
+Im trying to make a simple and easy to use application for managing your flowers.
+
+
