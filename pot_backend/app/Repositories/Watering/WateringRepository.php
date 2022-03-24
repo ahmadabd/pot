@@ -34,5 +34,8 @@ class WateringRepository implements WateringRepositoryInterface
             'last_watering_date' => Carbon::now(),
             'next_watering_date' => Carbon::now()->addDay($watering->first()->period)
         ]);
+
+        // Log a report of each watering
+        $flower->wateringReport()->attach($watering->first()->id);
     }
 }

@@ -63,13 +63,15 @@ class WateringTest extends TestCase
     {
         $flower = $this->createFlowerUser($this->user);
 
-        $this->postJson(route('watering.period.add', [$flower->id]), ['period' => 4]);
+        $watering = $this->createWatering($flower->id, 4);
 
         $response = $this->postJson(route('watering.add', [$flower->id]))
             ->assertStatus(201);
 
         $this->assertSame(1, $flower->watering()->count());
         
+        $this->assertSame(1, $flower->wateringReport()->count());
+
         $response->assertExactJson([
             'status' => 'success',
             'message' => 'Flower watered successfully',

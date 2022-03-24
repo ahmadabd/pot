@@ -35,6 +35,11 @@ class Flower extends Model
         return $this->hasMany(FlowerFertilizer::class);
     }
 
+    public function wateringReport()
+    {
+        return $this->belongsToMany(Watering::class, 'watering_reports');
+    }
+
     // Scopes
     public function scopeGetFlower($query)
     {
