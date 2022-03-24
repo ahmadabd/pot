@@ -21,5 +21,6 @@ Route::prefix('v1')->
         Route::put('/flower/{flower}', [FlowerController::class, 'update'])->name('flowers.update');
         Route::delete('/flower/{flower}', [FlowerController::class, 'delete'])->name('flowers.delete');
 
-        Route::post('watering/{flower}', [WateringController::class, 'addWateringToFlower'])->name('watering.add');
+        Route::post('watering/period/{flower}', [WateringController::class, 'addWateringPeriod'])->name('watering.period.add');
+        Route::post('watering/{flower}', [WateringController::class, 'wateringFlower'])->name('watering.add');
 });

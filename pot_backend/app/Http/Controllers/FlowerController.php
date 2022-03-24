@@ -31,7 +31,15 @@ class FlowerController extends Controller
             'message' => 'Flower get successfully',
         ];
 
-        $result["data"] = $this->flowerRepository->getFlowers($request->user, $request->get('paginationLimit'));
+        $flowers = $this->flowerRepository->getFlowers($request->user, $request->get('paginationLimit'));
+
+        $result["data"] = [
+            'total' => $flowers->total(),
+            'lastPage' => $flowers->lastPage(),
+            'perPage' => $flowers->perPage(),
+            'currentPage' => $flowers->currentPage(),
+            'items' => $flowers->items(),
+        ];
 
         return response()->json($result, 200);
     }

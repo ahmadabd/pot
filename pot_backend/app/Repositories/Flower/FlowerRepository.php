@@ -17,19 +17,13 @@ class FlowerRepository implements FlowerRepositoryInterface
             ->firstOrFail();
     }
 
-    public function getFlowers(User $user, ?int $paginationLimit) : array
+    public function getFlowers(User $user, ?int $paginationLimit)
     {
         $flowers = $user->flowers()
             ->getFlower()
             ->paginate($paginationLimit ?? 12);
         
-        return [
-            'total' => $flowers->total(),
-            'lastPage' => $flowers->lastPage(),
-            'perPage' => $flowers->perPage(),
-            'currentPage' => $flowers->currentPage(),
-            'items' => $flowers->items(),
-        ];
+        return $flowers;
     }
 
     public function createFlower($request) 

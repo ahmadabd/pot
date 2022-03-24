@@ -8,9 +8,9 @@ use App\Repositories\Watering\WateringRepositoryInterface;
 
 class WateringController extends Controller
 {
-    public function __construct(private WateringRepositoryInterface $flowerRepository){}
+    public function __construct(private WateringRepositoryInterface $wateringRepository){}
 
-    public function addWateringToFlower(WateringRequest $request, Flower $flower)
+    public function addWateringPeriod(WateringRequest $request, Flower $flower)
     {
         $result = [
             'status' => 'success',
@@ -19,7 +19,20 @@ class WateringController extends Controller
 
         $this->authorize('change', $flower);
         
-        $this->flowerRepository->AddWateringPeriod($request->validated()['period'], $flower->id);
+        $this->wateringRepository->AddWateringPeriod($request->validated()['period'], $flower->id);
+
+        return response()->json($result, 201);
+    }
+
+
+    public function wateringFlower(Flower $flower)
+    {
+        $result = [
+            'status' => 'success',
+            'message' => 'Flower watered successfully',
+        ];
+
+        $this->wateringRepository->FlowerWatering($flower);
 
         return response()->json($result, 201);
     }

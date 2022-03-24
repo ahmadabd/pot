@@ -9,7 +9,7 @@ interface FlowerRepositoryInterface
 {
     public function getFlower(User $user, int $id);
 
-    public function getFlowers(User $user, ?int $paginationLimit) : array;
+    public function getFlowers(User $user, ?int $paginationLimit);
 
     public function createFlower($request);
 
