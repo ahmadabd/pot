@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Flower;
 
 use App\Models\Flower;
 use App\Models\Role;

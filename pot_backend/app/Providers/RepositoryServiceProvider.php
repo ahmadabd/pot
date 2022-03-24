@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Repositories\FlowerRepositoryInterface;
-use App\Repositories\FlowerRepository;
+use App\Repositories\Flower\FlowerRepositoryInterface;
+use App\Repositories\Flower\FlowerRepository;
+use App\Repositories\Watering\WateringRepository;
+use App\Repositories\Watering\WateringRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -16,6 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(FlowerRepositoryInterface::class, FlowerRepository::class);
+        $this->app->bind(WateringRepositoryInterface::class, WateringRepository::class);
     }
 
     /**
