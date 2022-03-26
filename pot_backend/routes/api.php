@@ -26,4 +26,5 @@ Route::prefix('v1')->
         Route::post('watering/{flower}', [WateringController::class, 'wateringFlower'])->name('watering.add');
 
         Route::post('fertilize/period/{flower}', [FertilizerController::class, 'addFertilizePeriodANDAmount'])->name('fertilize.period.add');
+        Route::post('fertilize/{flower}', [FertilizerController::class, 'fertilizingFlower'])->name('fertilize.add');
 });

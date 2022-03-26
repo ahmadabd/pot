@@ -28,4 +28,16 @@ class FertilizerController extends Controller
         
         return response()->json($result, 201);
     }
+
+    public function fertilizingFlower(Flower $flower)
+    {
+        $result = [
+            'status' => 'success',
+            'message' => 'Flower fertilized successfully',
+        ];
+
+        $this->fertilizeRepository->flowerFertalizing($flower);
+
+        return response()->json($result, 201);
+    }
 }

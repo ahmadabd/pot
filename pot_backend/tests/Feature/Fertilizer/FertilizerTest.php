@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Fertilizer;
 
+use App\Models\FertilizerReport;
 use App\Models\FlowerFertilizer;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\Utilities\UsefullTools;
@@ -48,7 +50,7 @@ class FertilizerTest extends TestCase
 
         $response->assertExactJson([
             "status" => "error",
-            "message" => "ModelNotFound: Fertilizer not found"
+            "message" => "ModelNotFound: Fertilize not found"
         ]);
     }
 
@@ -66,6 +68,41 @@ class FertilizerTest extends TestCase
         $response->assertExactJson([
             "status" => "success",
             "message" => "Period and Amount set successfully on Fertilize"
+        ]);
+    }
+
+
+    /** @test */
+    public function check_flower_fertilizing_without_flower_fertaziler_configs()
+    {
+        $flower = $this->createFlowerUser($this->user);
+        $fertilize = $this->createFertilize();
+
+        $response = $this->postJson(route('fertilize.add', [$flower->id]))
+            ->assertStatus(404);
+
+        $response->assertExactJson([
+            "status" => "error",
+            "message" => "ModelNotFound: There is not set fertilizing configs for this flower"
+        ]);
+    }
+
+
+    /** @test */
+    public function check_flower_fertilizing()
+    {
+        $flower = $this->createFlowerUser($this->user);
+        $flowerFertilizer = $this->createFertilizerConfigs($flower->id, 4);
+
+        $response = $this->postJson(route('fertilize.add', [$flower->id]))
+            ->assertStatus(201);
+
+        $this->assertSame(1, FlowerFertilizer::where('flower_id', $flower->id)->count());
+        $this->assertSame(1, FertilizerReport::where('flower_id', $flower->id)->count());
+
+        $response->assertExactJson([
+            "status" => "success",
+            "message" => "Flower fertilized successfully"
         ]);
     }
 }
