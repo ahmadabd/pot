@@ -11,4 +11,6 @@ interface FertilizeRepositoryInterface
     public function flowerFertalizing(Flower $flower): void;
 
     public function create(string $name): void;
+
+    public function getFertilizers(?int $paginationLimit);
 }

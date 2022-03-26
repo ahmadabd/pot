@@ -123,4 +123,58 @@ class FertilizerTest extends TestCase
             "message" => "Fertilizer added successfully"
         ]);
     }
+
+
+    /** @test */
+    public function check_getAll_fertilizers()
+    {
+        $fertilizers = Fertilizer::factory(10)->create();
+    
+        $response = $this->getJson(route('fertilizer.getAll'))
+            ->assertStatus(200);
+
+        $response->assertJson([
+            "status" => "success",
+            "message" => "Fertilizers get successfully",
+            "data" => [
+                "total" => 10,
+                "lastPage" => 1,
+                "perPage" => 12,
+                "currentPage" => 1,
+                "items" => [
+                    [
+                        'id' => $fertilizers[0]->id,
+                        'name' => $fertilizers[0]->name,
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+
+    /** @test */
+    public function check_getAll_fertilizers_with_pahination()
+    {
+        $fertilizers = Fertilizer::factory(10)->create();
+    
+        $response = $this->getJson(route('fertilizer.getAll', ['paginationLimit' => 5]))
+            ->assertStatus(200);
+
+        $response->assertJson([
+            "status" => "success",
+            "message" => "Fertilizers get successfully",
+            "data" => [
+                "total" => 10,
+                "lastPage" => 2,
+                "perPage" => 5,
+                "currentPage" => 1,
+                "items" => [
+                    [
+                        'id' => $fertilizers[0]->id,
+                        'name' => $fertilizers[0]->name,
+                    ]
+                ]
+            ]
+        ]);
+    }
 }

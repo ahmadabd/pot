@@ -6,6 +6,7 @@ use App\Http\Requests\FertilizerRequest;
 use App\Http\Requests\FlowerFertilizerRequest;
 use App\Models\Flower;
 use App\Repositories\Fertilize\FertilizeRepositoryInterface;
+use Illuminate\Http\Request;
 
 class FertilizerController extends Controller
 {
@@ -23,6 +24,29 @@ class FertilizerController extends Controller
 
         return response()->json($result, 201);
     }
+
+
+    public function getFertilizers(Request $request)
+    {
+        $result = [
+            'status' => 'success',
+            'message' => 'Fertilizers get successfully',
+        ];
+
+        $fertilizers = $this->fertilizeRepository->getFertilizers($request->get('paginationLimit'));
+
+        $result["data"] = [
+            'total' => $fertilizers->total(),
+            'lastPage' => $fertilizers->lastPage(),
+            'perPage' => $fertilizers->perPage(),
+            'currentPage' => $fertilizers->currentPage(),
+            'items' => $fertilizers->items(),
+        ];
+
+        return response()->json($result, 200);
+        
+    }
+
 
     public function addFlowerFertilizerPeriodANDAmount(FlowerFertilizerRequest $request, Flower $flower)
     {

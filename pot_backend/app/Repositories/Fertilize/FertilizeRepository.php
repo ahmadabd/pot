@@ -48,4 +48,9 @@ class FertilizeRepository implements FertilizeRepositoryInterface
             'name' => $name,
         ]);
     }
+
+    public function getFertilizers(?int $paginationLimit)
+    {
+        return Fertilizer::paginate($paginationLimit ?? 12);
+    }
 }
