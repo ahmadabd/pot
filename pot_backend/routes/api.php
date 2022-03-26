@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FertilizerController;
 use App\Http\Controllers\FlowerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WateringController;
@@ -23,4 +24,6 @@ Route::prefix('v1')->
 
         Route::post('watering/period/{flower}', [WateringController::class, 'addWateringPeriod'])->name('watering.period.add');
         Route::post('watering/{flower}', [WateringController::class, 'wateringFlower'])->name('watering.add');
+
+        Route::post('fertilize/period/{flower}', [FertilizerController::class, 'addFertilizePeriodANDAmount'])->name('fertilize.period.add');
 });

@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreign('fertilizer_id')->references('id')->on('fertilizers')->onDelete('cascade');
             $table->integer('period');
             $table->float('amount');
-            $table->dateTime('last_fertilizer_date');
-            $table->dateTime('next_fertilizer_date');
+            $table->dateTime('last_fertilizer_date')->nullable();
+            $table->dateTime('next_fertilizer_date')->nullable();
             $table->timestamps();
         });
     }
