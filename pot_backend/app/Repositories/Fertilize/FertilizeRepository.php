@@ -40,4 +40,12 @@ class FertilizeRepository implements FertilizeRepositoryInterface
         // Log a report of each fertilizing
         $flower->fertazilingReport()->attach($fertiziling->first()->id);
     }
+
+
+    public function create(string $name): void
+    {
+        Fertilizer::create([
+            'name' => $name,
+        ]);
+    }
 }

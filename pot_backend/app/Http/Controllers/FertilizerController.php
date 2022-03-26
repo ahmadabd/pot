@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FertilizeRequest;
+use App\Http\Requests\FertilizerRequest;
+use App\Http\Requests\FlowerFertilizerRequest;
 use App\Models\Flower;
 use App\Repositories\Fertilize\FertilizeRepositoryInterface;
 
@@ -10,7 +11,20 @@ class FertilizerController extends Controller
 {
     public function __construct(private FertilizeRepositoryInterface $fertilizeRepository){}
 
-    public function addFertilizePeriodANDAmount(FertilizeRequest $request, Flower $flower)
+
+    public function createFertilizer(FertilizerRequest $request)
+    {
+        $result = [
+            'status' => 'success',
+            'message' => 'Fertilizer added successfully',
+        ];
+        
+        $this->fertilizeRepository->create($request->validated()['name']);
+
+        return response()->json($result, 201);
+    }
+
+    public function addFlowerFertilizerPeriodANDAmount(FlowerFertilizerRequest $request, Flower $flower)
     {
         $result = [
             'status' => 'success',

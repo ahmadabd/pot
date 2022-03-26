@@ -27,12 +27,12 @@ trait FertilizerFactories
         return $flower;
     }
 
-    public function createFertilize()
+    public function createFertilizer()
     {
         return Fertilizer::factory()->create();
     }
 
-    public function createFertilizerConfigs(int $flowerId, int $period)
+    public function createFlowerFertilizerConfigs(int $flowerId, int $period)
     {
         $fertilizer = Fertilizer::factory()->create();
         

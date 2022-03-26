@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Fertilizer;
 
+use App\Models\Fertilizer;
 use App\Models\FertilizerReport;
 use App\Models\FlowerFertilizer;
 use Carbon\Carbon;
@@ -26,11 +27,11 @@ class FertilizerTest extends TestCase
 
 
     /** @test */
-    public function check_add_period_and_amount_on_fertilize_without_fertilizeId()
+    public function check_add_period_and_amount_on_flowerFertilizer_without_fertilizeId()
     {
         $flower = $this->createFlowerUser($this->user);
 
-        $response = $this->postJson(route('fertilize.period.add', [$flower->id]), ['period' => 2, 'amount' => 2.1])
+        $response = $this->postJson(route('fertilizer.period.add', [$flower->id]), ['period' => 2, 'amount' => 2.1])
             ->assertStatus(400);
 
         $response->assertExactJson([
@@ -41,11 +42,11 @@ class FertilizerTest extends TestCase
 
 
     /** @test */
-    public function check_add_period_and_amount_on_fertilize_with_wrong_fertilizeId()
+    public function check_add_period_and_amount_on_flowerFertilizer_with_wrong_fertilizeId()
     {
         $flower = $this->createFlowerUser($this->user);
 
-        $response = $this->postJson(route('fertilize.period.add', [$flower->id]), ['fertilize' => 1, 'period' => 2, 'amount' => 2.1])
+        $response = $this->postJson(route('fertilizer.period.add', [$flower->id]), ['fertilize' => 1, 'period' => 2, 'amount' => 2.1])
             ->assertStatus(404);
 
         $response->assertExactJson([
@@ -55,12 +56,12 @@ class FertilizerTest extends TestCase
     }
 
     /** @test */
-    public function check_add_period_and_amount_on_fertilize()
+    public function check_add_period_and_amount_on_flowerFertilizer()
     {
         $flower = $this->createFlowerUser($this->user);
-        $fertilize = $this->createFertilize();
+        $fertilize = $this->createFertilizer();
 
-        $response = $this->postJson(route('fertilize.period.add', [$flower->id]), ['fertilize' => $fertilize->id, 'period' => 2, 'amount' => 2.1])
+        $response = $this->postJson(route('fertilizer.period.add', [$flower->id]), ['fertilize' => $fertilize->id, 'period' => 2, 'amount' => 2.1])
             ->assertStatus(201);
 
         $this->assertSame("2", FlowerFertilizer::where('flower_id', $flower->id)->where('fertilizer_id', $fertilize->id)->first()->period);
@@ -73,12 +74,12 @@ class FertilizerTest extends TestCase
 
 
     /** @test */
-    public function check_flower_fertilizing_without_flower_fertaziler_configs()
+    public function check_flower_fertilizing_without_flowerFertaziler_configs()
     {
         $flower = $this->createFlowerUser($this->user);
-        $fertilize = $this->createFertilize();
+        $this->createFertilizer();
 
-        $response = $this->postJson(route('fertilize.add', [$flower->id]))
+        $response = $this->postJson(route('fertilizing.add', [$flower->id]))
             ->assertStatus(404);
 
         $response->assertExactJson([
@@ -92,17 +93,34 @@ class FertilizerTest extends TestCase
     public function check_flower_fertilizing()
     {
         $flower = $this->createFlowerUser($this->user);
-        $flowerFertilizer = $this->createFertilizerConfigs($flower->id, 4);
+        $flowerFertilizer = $this->createFlowerFertilizerConfigs($flower->id, 4);
 
-        $response = $this->postJson(route('fertilize.add', [$flower->id]))
+        $response = $this->postJson(route('fertilizing.add', [$flower->id]))
             ->assertStatus(201);
 
-        $this->assertSame(1, FlowerFertilizer::where('flower_id', $flower->id)->count());
+        $this->assertSame(1, FlowerFertilizer::where('id', $flowerFertilizer->id)->where('flower_id', $flower->id)->count());
         $this->assertSame(1, FertilizerReport::where('flower_id', $flower->id)->count());
 
         $response->assertExactJson([
             "status" => "success",
             "message" => "Flower fertilized successfully"
+        ]);
+    }
+
+
+    /** @test */
+    public function check_add_fertilizer()
+    {
+        $fertilizerName = 'animaly';
+
+        $response = $this->postJson(route('fertilizer.add'), ['name' => $fertilizerName])
+            ->assertStatus(201);
+
+        $this->assertSame($fertilizerName, Fertilizer::first()->name);
+
+        $response->assertExactJson([
+            "status" => "success",
+            "message" => "Fertilizer added successfully"
         ]);
     }
 }
