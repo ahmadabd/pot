@@ -1,14 +1,16 @@
 <?php
 
-namespace Tests\Feature\User;
+namespace Tests\Feature\Api\User;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Utilities\UsefullTools;
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
+    use UsefullTools;
     
     /** @test */
     public function check_user_registeration() 
@@ -101,9 +103,7 @@ class UserTest extends TestCase
     /** @test */
     public function check_user_logout() 
     {
-        $user = User::factory()->create();
-
-        $this->actingAs($user);
+        $user = $this->AuthenticatedUser();
         
         $response = $this->delete(route('logout'));
 

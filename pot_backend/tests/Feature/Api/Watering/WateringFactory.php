@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Watering;
+namespace Tests\Feature\Api\Watering;
 
 use App\Models\Flower;
 use App\Models\Role;

@@ -1,11 +1,10 @@
 <?php
 
-namespace Tests\Feature\Fertilizer;
+namespace Tests\Feature\Api\Fertilizer;
 
 use App\Models\Fertilizer;
 use App\Models\FertilizerReport;
 use App\Models\FlowerFertilizer;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\Utilities\UsefullTools;

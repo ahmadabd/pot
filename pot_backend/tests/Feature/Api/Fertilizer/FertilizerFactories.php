@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Fertilizer;
+namespace Tests\Feature\Api\Fertilizer;
 
 use App\Models\Fertilizer;
 use App\Models\Flower;

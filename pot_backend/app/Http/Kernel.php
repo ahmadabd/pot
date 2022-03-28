@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -66,4 +67,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'getUser'   => \App\Http\Middleware\GetUser::class,
     ];
+
+
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('watering:today')->daily()->at('05:00');
+    }
 }
