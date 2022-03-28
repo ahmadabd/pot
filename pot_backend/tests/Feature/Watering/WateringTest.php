@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Watering;
 
+use App\Models\Watering;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\Utilities\UsefullTools;
@@ -75,6 +76,66 @@ class WateringTest extends TestCase
         $response->assertExactJson([
             'status' => 'success',
             'message' => 'Flower watered successfully',
+        ]);
+    }
+
+
+    /** @test */
+    public function check_get_user_today_watering()
+    {
+        $flower = $this->createFlowerUser($this->user);
+
+        $watering = Watering::factory()->create([
+            'flower_id' => $flower->id,
+            'period' => 2,
+            'next_watering_date' => now()
+        ]);
+
+        $response = $this->getJson(route('watering.today'))
+            ->assertStatus(200);
+
+        $response->assertJson([
+            "status" => "success",
+            "message" => "Get user todays watering flowers",
+            "data" => [
+                "total" => 1,
+                "lastPage" => 1,
+                "perPage" => 12,
+                "currentPage" => 1,
+                "items" => [
+                    [
+                        "id" => $flower->id,
+                        "name" => $flower->name
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+
+    /** @test */
+    public function check_get_today_watering()
+    {
+        $flower = $this->createFlowerUser($this->user);
+
+        $watering = Watering::factory()->create([
+            'flower_id' => $flower->id,
+            'period' => 2,
+            'next_watering_date' => now()
+        ]);
+
+        $response = $this->getJson(route('watering.today.all'))
+            ->assertStatus(200);
+
+        $response->assertJson([
+            "status" => "success",
+            "message" => "Get all todays watering flowers",
+            "data" => [
+                [
+                    "id" => $flower->id,
+                    "name" => $flower->name
+                ]
+            ]
         ]);
     }
 }

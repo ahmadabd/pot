@@ -3,6 +3,7 @@
 namespace App\Repositories\Watering;
 
 use App\Models\Flower;
+use App\Models\User;
 use App\Models\Watering;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -37,5 +38,26 @@ class WateringRepository implements WateringRepositoryInterface
 
         // Log a report of each watering
         $flower->wateringReport()->attach($watering->first()->id);
+    }
+
+
+    public function getUserTodoyWatering(User $user, ?int $paginationLimit)
+    {
+        $flowers = $user->flowers()
+            ->whereHas('watering', function($q) {
+                $q->where('next_watering_date', '<=', now());
+            });
+        
+        return $flowers->paginate($paginationLimit ?? 12);
+    }
+
+
+    public function getTodoyWatering() 
+    {
+        $flowers = Flower::whereHas('watering', function($q) {
+            $q->where('next_watering_date', '<=', now());
+        });
+        
+        return $flowers->get();
     }
 }

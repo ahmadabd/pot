@@ -24,6 +24,8 @@ Route::prefix('v1')->
 
         Route::post('watering/period/{flower}', [WateringController::class, 'addWateringPeriod'])->name('watering.period.add');
         Route::post('watering/{flower}', [WateringController::class, 'wateringFlower'])->name('watering.add');
+        Route::get('watering/today', [WateringController::class, 'getUserTodoyWatering'])->name('watering.today');
+        Route::get('watering/today/all', [WateringController::class, 'getTodoyWatering'])->name('watering.today.all');
 
         Route::post('fertilizer', [FertilizerController::class, 'createFertilizer'])->name('fertilizer.add');
         Route::get('fertilizer', [FertilizerController::class, 'getFertilizers'])->name('fertilizer.getAll');
