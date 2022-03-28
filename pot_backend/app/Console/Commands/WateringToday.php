@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -42,12 +43,11 @@ class WateringToday extends Command
         $request = Request::create(route('watering.today.all'), 'GET');
         $response = app()->handle($request);
 
-        // make notification
+        // make notification using broadcast
 
-        // log
-
-        // get user and return just users watering flowers
-
+        
+        Log::info('Watering:today command executed today at: ' . Carbon::now());
+        
         return 0;
     }
 }
