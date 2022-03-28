@@ -133,7 +133,12 @@ class WateringTest extends TestCase
             "data" => [
                 [
                     "id" => $flower->id,
-                    "name" => $flower->name
+                    "name" => $flower->name,
+                    "users" => [
+                        [
+                            "id" => $this->user->id,
+                        ]
+                    ]
                 ]
             ]
         ]);

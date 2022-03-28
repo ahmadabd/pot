@@ -54,7 +54,7 @@ class WateringRepository implements WateringRepositoryInterface
 
     public function getTodoyWatering() 
     {
-        $flowers = Flower::whereHas('watering', function($q) {
+        $flowers = Flower::with('users')->whereHas('watering', function($q) {
             $q->where('next_watering_date', '<=', now());
         });
         
