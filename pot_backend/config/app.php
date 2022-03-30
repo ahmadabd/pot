@@ -180,6 +180,7 @@ return [
         // My Providers
         App\Providers\TokenManagerProvider::class,
         App\Providers\RepositoryServiceProvider::class,
+        App\Providers\NotificationServiceProvider::class,
     ],
 
     /*

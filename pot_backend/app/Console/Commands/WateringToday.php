@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Notification\WateringNotifyImp;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class WateringToday extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(private WateringNotifyImp $notify)
     {
         parent::__construct();
     }
@@ -43,8 +44,10 @@ class WateringToday extends Command
         $request = Request::create(route('watering.today.all'), 'GET');
         $response = app()->handle($request);
 
-        // make notification using broadcast
+        $data = json_decode($response->getContent())->data;
 
+        // send notification to users that their flowers should get water today
+        $this->notify->WateringNotify($data);        
         
         Log::info('Watering:today command executed today at: ' . Carbon::now());
         

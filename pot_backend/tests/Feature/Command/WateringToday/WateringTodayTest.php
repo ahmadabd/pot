@@ -3,7 +3,9 @@
 namespace Tests\Feature\Command\WateringToday;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+use Mockery;
 use Tests\TestCase;
 use Tests\Utilities\UsefullTools;
 
@@ -20,6 +22,18 @@ class WateringTodayTest extends TestCase
         parent::setUp();
 
         $this->user = $this->AuthenticatedUser();
+
+        // Mocking
+        Notification::fake();
+        Log::shouldReceive('info')->andReturn(true);
+    }
+
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Mockery::close();
     }
 
     /** @test */
