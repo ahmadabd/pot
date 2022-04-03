@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('watering:today')->daily()->at('05:00');
+        $schedule->command('fertilizing:today')->daily()->at('06:00');
     }
 }

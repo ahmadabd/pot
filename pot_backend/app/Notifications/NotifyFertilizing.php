@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotifyWatering extends Notification
+class NotifyFertilizing extends Notification
 {
     use Queueable;
 
@@ -35,7 +35,7 @@ class NotifyWatering extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'message' => 'Your flower should be watered',
+            'message' => 'Your flower should be fertilize',
             'user_id' => $notifiable->id,
         ];
     }
@@ -43,7 +43,7 @@ class NotifyWatering extends Notification
     public function toBroadcast($notifiable)
     {
         return [
-            'message' => 'Your flower should be watered',
+            'message' => 'Your flower should be fertilize',
             'user_id' => $notifiable->id,
         ];
     }

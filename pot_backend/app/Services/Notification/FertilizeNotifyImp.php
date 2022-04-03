@@ -4,5 +4,5 @@ namespace App\Services\Notification;
 
 interface FertilizeNotifyImp
 {
-    public function FertilizeNotify($users): void;
+    public function FertilizeNotify($flowers): void;
 }
