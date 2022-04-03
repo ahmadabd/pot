@@ -5,6 +5,7 @@ namespace App\Repositories\Fertilize;
 use App\Models\Fertilizer;
 use App\Models\Flower;
 use App\Models\FlowerFertilizer;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -52,5 +53,14 @@ class FertilizeRepository implements FertilizeRepositoryInterface
     public function getFertilizers(?int $paginationLimit)
     {
         return Fertilizer::paginate($paginationLimit ?? 12);
+    }
+
+    public function getUserTodoyFertilizing(User $user, ?int $paginationLimit)
+    {
+        $flowers = $user->flowers()->whereHas('flowerFertilizers', function($q) {
+            $q->where('next_fertilizer_date', '<=', now());
+        });
+
+        return $flowers->paginate($paginationLimit ?? 12);
     }
 }

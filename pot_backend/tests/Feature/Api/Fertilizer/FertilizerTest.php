@@ -176,4 +176,31 @@ class FertilizerTest extends TestCase
             ]
         ]);
     }
+
+    /** @test */
+    public function getUserTodoyFertilizing()
+    {
+        $flower = $this->createFlowerUser($this->user);
+        $this->createFlowerFertilizerConfigs($flower->id, 4, now());
+
+        $response = $this->getJson(route('fertilizing.today'));
+
+        $response->assertJson(
+            [
+                "status" => "success",
+                "message" => "Get user todays fertilizing flowers",
+                "data" => [
+                    "total" => 1,
+                    "lastPage" => 1,
+                    "perPage" => 12,
+                    "currentPage" => 1,
+                    "items" => [
+                        [
+                            "id" => $flower->id
+                        ]
+                    ]
+                ]
+              ]
+        );
+    }
 }

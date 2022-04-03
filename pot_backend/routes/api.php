@@ -31,4 +31,5 @@ Route::prefix('v1')->
         Route::get('fertilizer', [FertilizerController::class, 'getFertilizers'])->name('fertilizer.getAll');
         Route::post('fertilizer/period/{flower}', [FertilizerController::class, 'addFlowerFertilizerPeriodANDAmount'])->name('fertilizer.period.add');
         Route::post('fertilizer/{flower}', [FertilizerController::class, 'fertilizingFlower'])->name('fertilizing.add');
+        Route::get('fertilize/today', [FertilizerController::class, 'getUserTodoyFertilizing'])->name('fertilizing.today');
 });

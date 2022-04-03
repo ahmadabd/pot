@@ -3,6 +3,7 @@
 namespace App\Repositories\Fertilize;
 
 use App\Models\Flower;
+use App\Models\User;
 
 interface FertilizeRepositoryInterface
 {
@@ -13,4 +14,6 @@ interface FertilizeRepositoryInterface
     public function create(string $name): void;
 
     public function getFertilizers(?int $paginationLimit);
+
+    public function getUserTodoyFertilizing(User $user, ?int $paginationLimit);
 }

@@ -74,8 +74,30 @@ class FertilizerController extends Controller
             'message' => 'Flower fertilized successfully',
         ];
 
+        // Fertilize the flower
         $this->fertilizeRepository->flowerFertalizing($flower);
 
         return response()->json($result, 201);
+    }
+
+
+    public function getUserTodoyFertilizing(Request $request)
+    {
+        $result = [
+            'status' => 'success',
+            'message' => 'Get user todays fertilizing flowers',
+        ];
+
+        $flowers = $this->fertilizeRepository->getUserTodoyFertilizing($request->user(), $request->get('paginationLimit'));
+
+        $result["data"] = [
+            'total' => $flowers->total(),
+            'lastPage' => $flowers->lastPage(),
+            'perPage' => $flowers->perPage(),
+            'currentPage' => $flowers->currentPage(),
+            'items' => $flowers->items(),
+        ];
+
+        return response()->json($result, 200);
     }
 }

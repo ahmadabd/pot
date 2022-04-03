@@ -32,7 +32,7 @@ trait FertilizerFactories
         return Fertilizer::factory()->create();
     }
 
-    public function createFlowerFertilizerConfigs(int $flowerId, int $period)
+    public function createFlowerFertilizerConfigs(int $flowerId, int $period, $nextFertilize = null)
     {
         $fertilizer = Fertilizer::factory()->create();
         
@@ -42,7 +42,7 @@ trait FertilizerFactories
             'period' => $period,
             'amount' => 1,
             'last_fertilizer_date' => Carbon::yesterday(),
-            'next_fertilizer_date' => Carbon::yesterday()->addDays($period),
+            'next_fertilizer_date' => $nextFertilize ?? Carbon::yesterday()->addDays($period),
         ]);
     }
 }
