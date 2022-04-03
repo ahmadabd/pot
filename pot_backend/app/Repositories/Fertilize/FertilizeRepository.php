@@ -63,4 +63,13 @@ class FertilizeRepository implements FertilizeRepositoryInterface
 
         return $flowers->paginate($paginationLimit ?? 12);
     }
+
+    public function getTodoyFertilizing()
+    {
+        $flowers = Flower::with('users')->whereHas('flowerFertilizers', function($q) {
+            $q->where('next_fertilizer_date', '<=', now());
+        });
+
+        return $flowers->get();   
+    }
 }

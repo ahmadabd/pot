@@ -178,7 +178,7 @@ class FertilizerTest extends TestCase
     }
 
     /** @test */
-    public function getUserTodoyFertilizing()
+    public function check_getUserTodoyFertilizing()
     {
         $flower = $this->createFlowerUser($this->user);
         $this->createFlowerFertilizerConfigs($flower->id, 4, now());
@@ -201,6 +201,32 @@ class FertilizerTest extends TestCase
                     ]
                 ]
               ]
+        );
+    }
+
+    /** @test */
+    public function check_getTodoyFertilizing()
+    {
+        $flower = $this->createFlowerUser($this->user);
+        $this->createFlowerFertilizerConfigs($flower->id, 4, now());
+
+        $response = $this->getJson(route('fertilizing.today.all'));
+
+        $response->assertJson(
+            [
+                "status" => "success",
+                "message" => "Get all todays fertilizing flowers",
+                "data" => [
+                    [
+                        "id" => $flower->id,
+                        "users" => [
+                            [
+                                "id" => $this->user->id
+                            ]
+                        ]
+                    ]
+                ]   
+            ]
         );
     }
 }

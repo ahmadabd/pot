@@ -16,4 +16,6 @@ interface FertilizeRepositoryInterface
     public function getFertilizers(?int $paginationLimit);
 
     public function getUserTodoyFertilizing(User $user, ?int $paginationLimit);
+
+    public function getTodoyFertilizing();
 }

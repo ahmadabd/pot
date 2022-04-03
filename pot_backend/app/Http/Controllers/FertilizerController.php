@@ -100,4 +100,17 @@ class FertilizerController extends Controller
 
         return response()->json($result, 200);
     }
+
+
+    public function getTodoyFertilizing()
+    {
+        $result = [
+            'status' => 'success',
+            'message' => 'Get all todays fertilizing flowers',
+        ];
+
+        $result["data"] = $this->fertilizeRepository->getTodoyFertilizing();
+
+        return response()->json($result, 200);
+    }
 }
