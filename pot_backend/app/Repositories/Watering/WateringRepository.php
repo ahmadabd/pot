@@ -23,7 +23,7 @@ class WateringRepository implements WateringRepositoryInterface
     }
     
 
-    public function FlowerWatering(Flower $flower): void
+    public function FlowerWatering(User $user, Flower $flower): void
     {
         $watering = $flower->watering();
 
@@ -37,7 +37,7 @@ class WateringRepository implements WateringRepositoryInterface
         ]);
 
         // Log a report of each watering
-        $flower->wateringReport()->attach($watering->first()->id);
+        $flower->wateringReport()->attach($watering->first()->id, ['user_id' => $user->id]); 
     }
 
 

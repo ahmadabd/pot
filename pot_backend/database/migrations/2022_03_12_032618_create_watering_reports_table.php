@@ -18,7 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('flower_id');
             $table->foreign('flower_id')->references('id')->on('flowers')->onDelete('cascade');
             $table->unsignedBigInteger('watering_id');
-            $table->foreign('watering_id')->references('id')->on('waterings')->onDelete('cascade');
+            $table->foreign('watering_id')->references('id')->on('waterings');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

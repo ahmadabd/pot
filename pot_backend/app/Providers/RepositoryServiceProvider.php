@@ -8,6 +8,8 @@ use App\Repositories\Flower\FlowerRepositoryInterface;
 use App\Repositories\Flower\FlowerRepository;
 use App\Repositories\Watering\WateringRepository;
 use App\Repositories\Watering\WateringRepositoryInterface;
+use App\Repositories\WateringReport\WateringReportRepositoryInterface;
+use App\Repositories\WateringReport\WateringReportRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -22,6 +24,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(FlowerRepositoryInterface::class, FlowerRepository::class);
         $this->app->bind(WateringRepositoryInterface::class, WateringRepository::class);
         $this->app->bind(FertilizeRepositoryInterface::class, FertilizeRepository::class);
+        $this->app->bind(WateringReportRepositoryInterface::class, WateringReportRepository::class);
     }
 
     /**

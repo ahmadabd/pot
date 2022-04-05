@@ -9,7 +9,7 @@ interface WateringRepositoryInterface
 {
     public function AddWateringPeriod(int $period, int $flowerId): void;
 
-    public function FlowerWatering(Flower $flower): void;
+    public function FlowerWatering(User $user, Flower $flower): void;
 
     public function getUserTodoyWatering(User $user, ?int $paginationLimit);
 

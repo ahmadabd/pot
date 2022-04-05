@@ -4,6 +4,7 @@ use App\Http\Controllers\FertilizerController;
 use App\Http\Controllers\FlowerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WateringController;
+use App\Http\Controllers\WateringReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(UserController::class)->group(static function() {
@@ -22,15 +23,17 @@ Route::prefix('v1')->
         Route::put('/flower/{flower}', [FlowerController::class, 'update'])->name('flowers.update');
         Route::delete('/flower/{flower}', [FlowerController::class, 'delete'])->name('flowers.delete');
 
-        Route::post('watering/period/{flower}', [WateringController::class, 'addWateringPeriod'])->name('watering.period.add');
-        Route::post('watering/{flower}', [WateringController::class, 'wateringFlower'])->name('watering.add');
-        Route::get('watering/today', [WateringController::class, 'getUserTodoyWatering'])->name('watering.today');
-        Route::get('watering/today/all', [WateringController::class, 'getTodoyWatering'])->name('watering.today.all');
+        Route::post('/watering/period/{flower}', [WateringController::class, 'addWateringPeriod'])->name('watering.period.add');
+        Route::post('/watering/{flower}', [WateringController::class, 'wateringFlower'])->name('watering.add');
+        Route::get('/watering/today', [WateringController::class, 'getUserTodoyWatering'])->name('watering.today');
+        Route::get('/watering/today/all', [WateringController::class, 'getTodoyWatering'])->name('watering.today.all');
 
-        Route::post('fertilizer', [FertilizerController::class, 'createFertilizer'])->name('fertilizer.add');
-        Route::get('fertilizer', [FertilizerController::class, 'getFertilizers'])->name('fertilizer.getAll');
-        Route::post('fertilizer/period/{flower}', [FertilizerController::class, 'addFlowerFertilizerPeriodANDAmount'])->name('fertilizer.period.add');
-        Route::post('fertilizer/{flower}', [FertilizerController::class, 'fertilizingFlower'])->name('fertilizing.add');
-        Route::get('fertilize/today', [FertilizerController::class, 'getUserTodoyFertilizing'])->name('fertilizing.today');
-        Route::get('fertilize/today/all', [FertilizerController::class, 'getTodoyFertilizing'])->name('fertilizing.today.all');
+        Route::post('/fertilizer', [FertilizerController::class, 'createFertilizer'])->name('fertilizer.add');
+        Route::get('/fertilizer', [FertilizerController::class, 'getFertilizers'])->name('fertilizer.getAll');
+        Route::post('/fertilizer/period/{flower}', [FertilizerController::class, 'addFlowerFertilizerPeriodANDAmount'])->name('fertilizer.period.add');
+        Route::post('/fertilizer/{flower}', [FertilizerController::class, 'fertilizingFlower'])->name('fertilizing.add');
+        Route::get('/fertilize/today', [FertilizerController::class, 'getUserTodoyFertilizing'])->name('fertilizing.today');
+        Route::get('/fertilize/today/all', [FertilizerController::class, 'getTodoyFertilizing'])->name('fertilizing.today.all');
+
+        Route::get('/watering/report', [WateringReportController::class, 'index'])->name('watering.reports');
 });

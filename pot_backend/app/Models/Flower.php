@@ -37,7 +37,7 @@ class Flower extends Model
 
     public function wateringReport()
     {
-        return $this->belongsToMany(Watering::class, 'watering_reports');
+        return $this->belongsToMany(Watering::class, 'watering_reports')->withPivot('created_at');
     }
 
     public function fertazilingReport()

@@ -67,7 +67,7 @@ class FertilizerController extends Controller
         return response()->json($result, 201);
     }
 
-    public function fertilizingFlower(Flower $flower)
+    public function fertilizingFlower(Request $request, Flower $flower)
     {
         $result = [
             'status' => 'success',
@@ -75,7 +75,7 @@ class FertilizerController extends Controller
         ];
 
         // Fertilize the flower
-        $this->fertilizeRepository->flowerFertalizing($flower);
+        $this->fertilizeRepository->flowerFertalizing($request->user, $flower);
 
         return response()->json($result, 201);
     }
@@ -88,7 +88,7 @@ class FertilizerController extends Controller
             'message' => 'Get user todays fertilizing flowers',
         ];
 
-        $flowers = $this->fertilizeRepository->getUserTodoyFertilizing($request->user(), $request->get('paginationLimit'));
+        $flowers = $this->fertilizeRepository->getUserTodoyFertilizing($request->user, $request->get('paginationLimit'));
 
         $result["data"] = [
             'total' => $flowers->total(),

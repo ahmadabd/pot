@@ -25,7 +25,7 @@ class FertilizeRepository implements FertilizeRepositoryInterface
         }
     }
 
-    public function flowerFertalizing(Flower $flower): void
+    public function flowerFertalizing(User $user, Flower $flower): void
     {
         $fertiziling = $flower->flowerFertilizers();
         
@@ -39,7 +39,7 @@ class FertilizeRepository implements FertilizeRepositoryInterface
         ]);
 
         // Log a report of each fertilizing
-        $flower->fertazilingReport()->attach($fertiziling->first()->id);
+        $flower->fertazilingReport()->attach($fertiziling->first()->id, ['user_id' => $user->id]);
     }
 
 

@@ -27,14 +27,14 @@ class WateringController extends Controller
     }
 
 
-    public function wateringFlower(Flower $flower)
+    public function wateringFlower(Request $request, Flower $flower)
     {
         $result = [
             'status' => 'success',
             'message' => 'Flower watered successfully',
         ];
 
-        $this->wateringRepository->FlowerWatering($flower);
+        $this->wateringRepository->FlowerWatering($request->user, $flower);
 
         return response()->json($result, 201);
     }
