@@ -35,5 +35,6 @@ Route::prefix('v1')->
         Route::get('/fertilize/today', [FertilizerController::class, 'getUserTodoyFertilizing'])->name('fertilizing.today');
         Route::get('/fertilize/today/all', [FertilizerController::class, 'getTodoyFertilizing'])->name('fertilizing.today.all');
 
-        Route::get('/watering/report', [WateringReportController::class, 'index'])->name('watering.reports');
+        Route::get('/watering/report', [WateringReportController::class, 'getWateringReports'])->name('watering.reports');
+        Route::get('/watering/report/{flower}', [WateringReportController::class, 'getWateringReport'])->name('watering.report');
 });
