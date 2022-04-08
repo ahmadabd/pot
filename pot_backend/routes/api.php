@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FertilizerController;
+use App\Http\Controllers\FertilizerReportController;
 use App\Http\Controllers\FlowerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WateringController;
@@ -37,4 +38,7 @@ Route::prefix('v1')->
 
         Route::get('/watering/report', [WateringReportController::class, 'getWateringReports'])->name('watering.reports');
         Route::get('/watering/report/{flower}', [WateringReportController::class, 'getWateringReport'])->name('watering.report');
+
+        Route::get('/fertilizing/report', [FertilizerReportController::class, 'getFertilizingReports'])->name('fertilizing.reports');
+        Route::get('/fertilizing/report/{flower}', [FertilizerReportController::class, 'getFertilizingReport'])->name('fertilizing.report');
 });

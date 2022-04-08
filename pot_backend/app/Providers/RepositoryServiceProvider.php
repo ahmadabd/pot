@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Fertilize\FertilizeRepository;
 use App\Repositories\Fertilize\FertilizeRepositoryInterface;
+use App\Repositories\FertilizingReport\FertilizingReportRepository;
+use App\Repositories\FertilizingReport\FertilizingReportRepositoryInterface;
 use App\Repositories\Flower\FlowerRepositoryInterface;
 use App\Repositories\Flower\FlowerRepository;
 use App\Repositories\Watering\WateringRepository;
@@ -25,6 +27,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(WateringRepositoryInterface::class, WateringRepository::class);
         $this->app->bind(FertilizeRepositoryInterface::class, FertilizeRepository::class);
         $this->app->bind(WateringReportRepositoryInterface::class, WateringReportRepository::class);
+        $this->app->bind(FertilizingReportRepositoryInterface::class, FertilizingReportRepository::class);
     }
 
     /**
