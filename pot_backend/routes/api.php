@@ -3,6 +3,7 @@
 use App\Http\Controllers\FertilizerController;
 use App\Http\Controllers\FertilizerReportController;
 use App\Http\Controllers\FlowerController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WateringController;
 use App\Http\Controllers\WateringReportController;
@@ -41,4 +42,8 @@ Route::prefix('v1')->
 
         Route::get('/fertilizing/report', [FertilizerReportController::class, 'getFertilizingReports'])->name('fertilizing.reports');
         Route::get('/fertilizing/report/{flower}', [FertilizerReportController::class, 'getFertilizingReport'])->name('fertilizing.report');
+
+        Route::get('/report/flower', [ReportController::class, 'getAllFlowerReports'])->name('report.flowers');
+        Route::get('/report/flower/{flower}', [ReportController::class, 'getFlowerReports'])->name('report.flower');
+        Route::post('/report/flower/{flower}', [ReportController::class, 'addFlowerReport'])->name('report.flower.add');
 });

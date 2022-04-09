@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Flower;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class ReportFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'flower_id' => Flower::factory()->create()->id,
+            'height' => $this->faker->randomFloat(2, 0, 10),
+            'temperature' => $this->faker->randomFloat(2, 0, 10),
+            'humidity' => $this->faker->randomFloat(2, 0, 10),
         ];
     }
 }
