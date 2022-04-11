@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  database_pot:
+    container_name: potdb
+    image: mysql:8.0
+    restart: always
+    ports:
+      - '33062:3306'
+    volumes:
+      - pot-docker-data:/var/lib/mysql
+    networks:
+      - pot-network   
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=pot
+
+volumes:
+  pot-docker-data:
+
+networks:
+  pot-network:
